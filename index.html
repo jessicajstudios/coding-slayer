@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Coding Slayer — Code Highlighter</title>
+  <link rel="icon" type="image/png" href="coding-slayer-icon.png">
+  <link rel="apple-touch-icon" href="coding-slayer-icon.png">
+  <style>
+    :root{
+      --bg:#f6fbff;
+      --panel:#ffffff;
+      --ink:#0b2540;
+      --muted:#5a7da6;
+      --accent:#1f6fd6;
+      --accent-2:#2eb371;
+      --soft:#e3f0ff;
+      --soft-2:#e9f8f1;
+      --danger:#dc3545;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial;color:var(--ink);background:linear-gradient(180deg,#f9fcff, var(--bg))}
+    a{color:var(--accent)}
+    .wrap{max-width:1100px;margin:0 auto;padding:0 20px}
+    header{display:flex;align-items:center;gap:12px;padding:18px 0}
+    header img{width:40px;height:40px;border-radius:10px}
+    header .title{font-weight:700;letter-spacing:0.2px}
+    .hero{
+      background:linear-gradient(180deg,#ffffff, #f3f9ff);
+      border:1px solid #e7eef8;border-radius:20px;padding:32px;margin:16px 0 22px;
+      display:grid;grid-template-columns:1.1fr 0.9fr;gap:18px;
+      box-shadow:0 10px 30px rgba(31,111,214,0.08);
+    }
+    .hero h1{margin:2px 0 10px;font-size:clamp(24px,3.2vw,36px);color:#0d2c54}
+    .hero p{margin:0;color:#395b84;line-height:1.55}
+    .cta{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+    .btn{border:none;border-radius:12px;padding:12px 16px;font-weight:600;cursor:pointer}
+    .btn.primary{background:var(--accent);color:white;box-shadow:0 6px 16px rgba(31,111,214,0.25)}
+    .btn.primary:hover{filter:brightness(1.05)}
+    .btn.ghost{background:transparent;border:1px solid #cfe3ff;color:var(--accent)}
+    .badge{display:inline-flex;align-items:center;gap:8px;background:var(--soft);color:var(--accent);padding:8px 12px;border-radius:999px;font-weight:600}
+    .badge .dot{width:8px;height:8px;border-radius:999px;background:var(--accent-2);box-shadow:0 0 0 3px var(--soft-2)}
+    .card{background:var(--panel);border:1px solid #e8eef6;border-radius:16px;padding:14px}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    textarea{width:100%;min-height:190px;resize:vertical;background:#fcfeff;color:#0b2540;border:1px solid #cfe3ff;border-radius:12px;padding:10px;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
+    .row{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px}
+    button{border:none;border-radius:12px;padding:10px 14px;background:var(--soft);color:var(--accent);cursor:pointer;border:1px solid #cfe3ff}
+    button.primary{background:var(--accent);color:#fff;border-color:transparent}
+    button:disabled{opacity:.6;cursor:not-allowed}
+    .tip{color:#56779e;font-size:12px}
+    .out{margin-top:18px}
+    table{width:100%;border-collapse:separate;border-spacing:0 8px}
+    th,td{text-align:left;padding:10px 12px;font-size:14px}
+    th{color:#2b4f77;font-weight:700}
+    tr{background:#ffffff;border:1px solid #e6eef7}
+    tr td:first-child, tr th:first-child{border-top-left-radius:8px;border-bottom-left-radius:8px}
+    tr td:last-child, tr th:last-child{border-top-right-radius:8px;border-bottom-right-radius:8px}
+    tr.matchN{background: #fff0f1; border-color: #f3c7cd}
+    tr.matchN td{color:#8a1a2b}
+    .pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px}
+    .pill.n{background:#ffe6ea;color:#a31228;border:1px solid #f3c7cd}
+    .pill.ok{background:#e9f8f1;color:#0e5e32;border:1px solid #c6edd8}
+    footer{color:#56779e;margin:16px 0 32px;font-size:12px;text-align:center}
+    .section{padding:6px 0 24px}
+    .kbd{display:inline-block;padding:2px 6px;border:1px solid #cfe3ff;border-radius:6px;font-size:12px;background:#fcfeff}
+    .anchor{position:relative;top:-90px}
+    .divider{height:1px;background:#e8eef6;margin:8px 0 18px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <img src="coding-slayer-icon.png" alt="Coding Slayer icon">
+      <div class="title">Coding Slayer</div>
+      <div class="badge" style="margin-left:auto"><span class="dot"></span> PC-07 SMM</div>
+    </header>
+
+    <section class="hero">
+      <div>
+        <h1>Coding Slayer</h1>
+        <p>Healthcare Code Intelligence — highlight PC‑07 Severe Maternal Morbidity codes instantly, with smart wildcard matching and one‑click exports.</p>
+        <div class="cta">
+          <a class="btn primary" href="#app">Launch App</a>
+          <a class="btn ghost" href="#howto">How it works</a>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:center">
+        <img src="coding-slayer-icon.png" alt="Coding Slayer logo" style="width:140px;height:140px;border-radius:28px;box-shadow:0 10px 30px rgba(31,111,214,0.15)">
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <a class="anchor" id="app"></a>
+    <section class="section">
+      <div class="grid">
+        <div class="card">
+          <h3>1) Paste your codes (code + optional indicator)</h3>
+          <textarea id="input" placeholder="Examples:
+I97.120 N
+A41.9 N
+J81.0 Y
+O29.115 N
+5A1955Z N
+
+Formats allowed:
+- 'CODE N' (space)
+- 'CODE, N' (comma)
+- 'CODE	N' (tab)
+- Just 'CODE'"></textarea>
+          <div class="tip">The app parses the <strong>first token</strong> as the code and the <strong>last single-letter token</strong> as the indicator, if present.</div>
+          <div class="row">
+            <button id="sample">Load sample</button>
+            <button id="clearInput">Clear</button>
+          </div>
+        </div>
+        <div class="card">
+          <h3>2) Reference list (one per line)</h3>
+          <textarea id="ref" placeholder="Click 'Load PC‑07 ICD‑10 (diagnosis)' or 'Load PC‑07 Procedures' or paste your own list."></textarea>
+          <div class="row">
+            <button id="loadPC07">Load PC‑07 ICD‑10 (diagnosis)</button>
+            <button id="loadPC07PR">Load PC‑07 Procedures (includes transfusion)</button>
+            <button id="clearRef">Clear</button>
+          </div>
+          <div class="row">
+            <label><input type="checkbox" id="useWild" checked> Use smart wildcards (<span class="kbd">x</span>, <span class="kbd">*</span>, <span class="kbd">?</span>)</label>
+          </div>
+          <div class="tip">Examples: <span class="kbd">I21.xx</span> matches all I21 with two more chars; <span class="kbd">I49.0x</span> matches I49.00–I49.09; <span class="kbd">O29.112–O29.119</span> is recognized.</div>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:16px">
+        <button class="primary" id="run">Highlight</button>
+        <button id="exportCsv" disabled>Export highlighted to CSV</button>
+        <button id="copyHighlighted" disabled>Copy highlighted</button>
+      </div>
+
+      <div class="out" id="out"></div>
+    </section>
+
+    <div class="divider"></div>
+
+    <a class="anchor" id="howto"></a>
+    <section class="section card">
+      <h3>How it works</h3>
+      <ol>
+        <li>Use the right panel to load PC‑07 codes (Diagnosis or Procedures), or paste your own list (one code per line).</li>
+        <li>Paste your encounter rows on the left (e.g., <code>I97.120 N</code>).</li>
+        <li>Click <strong>Highlight</strong>. Rows where <em>code ∈ list</em> and <em>indicator = N</em> turn red.</li>
+        <li>Export or copy the highlighted rows.</li>
+      </ol>
+    </section>
+
+    <footer>
+      © Coding Slayer — PC‑07 Severe Maternal Morbidity Highlighter
+    </footer>
+  </div>
+
+  <script>
+  const $ = sel => document.querySelector(sel);
+  const PC07_ICD10 = [
+    'I21.xx','I22.x','I71.xx','I79.0','N17.x','O90.4','J80','J95.1','J95.2','J95.3','J95.82x','J96.0x','J96.2x','J96.9x','R06.03','R09.2',
+    'O88.112','O88.113','O88.119','O88.12','O88.13','I46.x','I49.0x','D65','D68.8','D68.9',
+    'O45.002','O45.003','O45.009','O45.012','O45.013','O45.019','O45.022','O45.023','O45.029','O45.092','O45.093','O45.099',
+    'O46.002','O46.003','O46.009','O46.012','O46.013','O46.019','O46.022','O46.023','O46.029','O46.092','O46.093','O46.099',
+    'O67.0','O72.3','O15.x','I97.120','I97.121','I97.130','I97.131','I97.710','I97.711',
+    'A81.2','G45.x','G46.x','G93.49','H34.0x','I60.xx','I61.xx','I62.xx','I63.00','I63.01x','I63.1xx','I63.2xx','I63.3xx','I63.4xx','I63.5xx','I63.6','I63.8x','I63.9',
+    'I65.xx','I66.xx','I67.xx','I68.xx','O22.50','O22.52','O22.53','I97.810','I97.811','I97.820','I97.821','O87.3',
+    'I50.1','I50.20','I50.21','I50.23','I50.30','I50.31','I50.33','I50.40','I50.41','I50.43','I50.810','I50.811','I50.813','I50.814','I50.82','I50.83','I50.84','I50.89','I50.9','J81.0',
+    'O29.112–O29.119','O29.122–O29.129','O29.192–O29.199','O29.212–O29.219','O29.292–O29.299','O74.0','O74.1','O74.2','O74.3','O89.0x','O89.1','O89.2','T88.2XXA','T88.3XXA',
+    'A32.7','A40.x','A41.x','I76','O85','O86.04','R65.20','R65.21','T81.12XA','T81.44XA',
+    'O75.1','R57.x','T78.2XXA','T81.10XA','T81.11XA','T81.19XA','T88.6XXA',
+    'D57.00','D57.01','D57.02','D57.211','D57.212','D57.219','D57.411','D57.412','D57.419','D57.811','D57.812','D57.819',
+    'I26.x','O88.012–O88.03','O88.212–O88.23','O88.312–O88.33','O88.812–O88.83','T80.0XXA'
+  ];
+  const PC07_PROC = [
+    '5A12012','5A2204Z',
+    '0UT90ZL','0UT90ZZ','0UT97ZL','0UT97ZZ',
+    '0B110F4','0B113F4','0B114F4',
+    '5A1935Z','5A1945Z','5A1955Z',
+    '30230H0','30230K0','30230L0','30230M0','30230N0','30230P0','30230R0','30230T0','30230H1','30230K1','30230L1','30230M1','30230N1','30230P1','30230R1','30230T1',
+    '30233H0','30233K0','30233L0','30233M0','30233N0','30233P0','30233R0','30233T0','30233H1','30233K1','30233L1','30233M1','30233N1','30233P1','30233R1','30233T1',
+    '30240H0','30240K0','30240L0','30240M0','30240N0','30240P0','30240R0','30240T0','30240H1','30240K1','30240L1','30240M1','30240N1','30240P1','30240R1','30240T1',
+    '30243H0','30243K0','30243L0','30243M0','30243N0','30243P0','30243R0','30243T0','30243H1','30243K1','30243L1','30243M1','30243N1','30243P1','30243R1','30243T1'
+  ];
+  function parseRef(raw){
+    const set = new Set();
+    raw.split(/\r?\n/).forEach(line=>{
+      const code = (line||"").trim().toUpperCase();
+      if(code) set.add(code);
+    });
+    return set;
+  }
+  function parseLines(raw){
+    const lines = [];
+    raw.split(/\r?\n/).forEach((line)=>{
+      if(!line.trim()) return;
+      const parts = line.replace(/,/g,' ').split(/\s+/).filter(Boolean);
+      if(parts.length===0) return;
+      const code = parts[0].toUpperCase();
+      let indicator = '';
+      const last = parts[parts.length-1];
+      if(/^[A-Za-z]$/.test(last)) indicator = last.toUpperCase();
+      lines.push({raw: line, code, indicator});
+    });
+    return lines;
+  }
+  function escapeHtml(s){ return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[c])); }
+  function wildcardToRegex(p){
+    if(/[\-–]/.test(p)){
+      const [a,b] = p.split(/[\-–]/).map(s=>s.trim());
+      if(a && b){
+        const prefLen = commonPrefixLen(a,b);
+        const ap = a.toUpperCase();
+        const bp = b.toUpperCase();
+        if(ap.length===bp.length){
+          const i = firstDiffIndex(ap,bp);
+          const pre = escapeRegex(ap.slice(0,i));
+          const ad = ap[i], bd = bp[i];
+          if(/\d/.test(ad) && /\d/.test(bd) && ap.slice(i+1)===bp.slice(i+1)){
+            const post = escapeRegex(ap.slice(i+1));
+            return new RegExp('^'+pre+'['+ad+'-'+bd+']'+post+'$','i');
+          }
+        }
+        const pre = escapeRegex(a.slice(0,prefLen));
+        return new RegExp('^'+pre+'[A-Z0-9]*$','i');
+      }
+    }
+    let s = p.toUpperCase().trim();
+    s = escapeRegex(s).replace(/X/g,'[A-Z0-9]').replace(/\*/g,'[A-Z0-9]*').replace(/\?/g,'[A-Z0-9]');
+    return new RegExp('^'+s+'$','i');
+  }
+  function escapeRegex(s){ return s.replace(/[.*+?^${}()|[\]\\]/g, r=>"\\"+r); }
+  function commonPrefixLen(a,b){ let i=0; while(i<a.length && i<b.length && a[i]===b[i]) i++; return i; }
+  function firstDiffIndex(a,b){ for(let i=0;i<Math.min(a.length,b.length);i++){ if(a[i]!==b[i]) return i;} return Math.min(a.length,b.length); }
+  function buildMatchers(refSet, useWild){
+    const matchers = [];
+    refSet.forEach(code=>{
+      if(useWild && /[Xx\*\?\-–]/.test(code)) matchers.push(wildcardToRegex(code));
+      else matchers.push(new RegExp('^'+escapeRegex(code)+'$','i'));
+    });
+    return matchers;
+  }
+  function isInRef(code, matchers){ return matchers.some(rx=>rx.test(code)); }
+  function renderTable(rows){
+    if(rows.length===0){ document.getElementById('out').innerHTML = '<div class="card">No rows parsed yet.</div>'; return; }
+    const table = document.createElement('table');
+    table.innerHTML = `<thead><tr><th>#</th><th>Code</th><th>Indicator</th><th>Original</th><th>Status</th></tr></thead>`;
+    const tbody = document.createElement('tbody');
+    rows.forEach((r,idx)=>{
+      const tr = document.createElement('tr');
+      if(r._matchN){ tr.classList.add('matchN'); }
+      tr.innerHTML = `<td>${idx+1}</td><td class="mono">${r.code}</td><td>${r.indicator?`<span class="pill ${r.indicator==='N'?'n':'ok'}">${r.indicator}</span>`:'—'}</td><td class="mono">${escapeHtml(r.raw)}</td><td>${r._matchN? '🔎 Match + N' : (r._inRef? 'In list' : '—')}</td>`;
+      tbody.appendChild(tr);
+    });
+    table.appendChild(tbody);
+    const out = document.getElementById('out');
+    out.innerHTML = '';
+    out.appendChild(table);
+  }
+  function run(){
+    const useWild = document.getElementById('useWild').checked;
+    const refSet = parseRef(document.getElementById('ref').value);
+    const matchers = buildMatchers(refSet, useWild);
+    const lines = parseLines(document.getElementById('input').value);
+    lines.forEach(l=>{ l._inRef = isInRef(l.code, matchers); l._matchN = l._inRef && l.indicator==='N'; });
+    renderTable(lines);
+    const highlighted = lines.filter(l=>l._matchN);
+    document.getElementById('exportCsv').disabled = highlighted.length===0;
+    document.getElementById('copyHighlighted').disabled = highlighted.length===0;
+    localStorage.setItem('hl_ref', document.getElementById('ref').value);
+    localStorage.setItem('hl_input', document.getElementById('input').value);
+    localStorage.setItem('hl_useWild', useWild? '1':'0');
+  }
+  function toCsv(rows){
+    const head = ['Code','Indicator','Original'];
+    const body = rows.map(r=>[r.code, r.indicator, r.raw]);
+    const all = [head, ...body].map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+    return all;
+  }
+  function download(filename, text){
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([text], {type:'text/csv'}));
+    a.download = filename;
+    document.body.appendChild(a); a.click(); a.remove();
+  }
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('run').addEventListener('click', run);
+    document.getElementById('clearInput').addEventListener('click', ()=>{ document.getElementById('input').value=''; run(); });
+    document.getElementById('clearRef').addEventListener('click', ()=>{ document.getElementById('ref').value=''; run(); });
+    document.getElementById('sample').addEventListener('click', ()=>{
+      document.getElementById('input').value = `I97.120 N\nA41.9 N\nJ81.0 Y\nO29.115 N\n5A1955Z N`;
+      run();
+    });
+    document.getElementById('loadPC07').addEventListener('click', ()=>{
+      document.getElementById('ref').value = PC07_ICD10.join('\n');
+      run();
+    });
+    document.getElementById('loadPC07PR').addEventListener('click', ()=>{
+      document.getElementById('ref').value = PC07_PROC.join('\n');
+      run();
+    });
+    document.getElementById('exportCsv').addEventListener('click', ()=>{
+      const useWild = document.getElementById('useWild').checked;
+      const refSet = parseRef(document.getElementById('ref').value);
+      const matchers = buildMatchers(refSet, useWild);
+      const lines = parseLines(document.getElementById('input').value).map(l=>{ l._inRef = isInRef(l.code, matchers); l._matchN = l._inRef && l.indicator==='N'; return l; });
+      const highlighted = lines.filter(l=>l._matchN);
+      const csv = toCsv(highlighted);
+      download('highlighted_matches_N.csv', csv);
+    });
+    document.getElementById('copyHighlighted').addEventListener('click', async ()=>{
+      const useWild = document.getElementById('useWild').checked;
+      const refSet = parseRef(document.getElementById('ref').value);
+      const matchers = buildMatchers(refSet, useWild);
+      const highlighted = parseLines(document.getElementById('input').value).filter(l=> isInRef(l.code, matchers) && l.indicator==='N').map(l=>l.raw).join('\n');
+      try{ await navigator.clipboard.writeText(highlighted); alert('Highlighted rows copied to clipboard.'); }catch(e){ alert('Copy failed. You can manually select and copy.'); }
+    });
+    const r = localStorage.getItem('hl_ref');
+    const i = localStorage.getItem('hl_input');
+    const w = localStorage.getItem('hl_useWild');
+    if(r) document.getElementById('ref').value = r;
+    if(i) document.getElementById('input').value = i;
+    document.getElementById('useWild').checked = w !== '0';
+    if(r || i) run();
+  });
+  </script>
+</body>
+</html>
