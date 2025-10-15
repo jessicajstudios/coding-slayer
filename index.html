@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Coding Slayer — Code Highlighter</title>
+  <title>Coding Slayer — Code Highlighter (Multiselect ICD-9/10 + DX/PR)</title>
   <link rel="icon" type="image/png" href="coding-slayer-icon.png">
   <link rel="apple-touch-icon" href="coding-slayer-icon.png">
   <style>
@@ -117,13 +117,28 @@ Formats allowed:
         </div>
         <div class="card">
           <h3>2) Reference list (one per line)</h3>
-          <textarea id="ref" placeholder="Click 'Load PC‑07 ICD‑10 (diagnosis)' or 'Load PC‑07 Procedures' or 'Load PC‑07 DX + Procedures', or paste your own list."></textarea>
-          <div class="row">
-            <button id="loadPC07">Load PC‑07 ICD‑10 (diagnosis)</button>
-            <button id="loadPC07PR">Load PC‑07 Procedures (includes transfusion)</button>
-            <button id="loadPC07Both">Load PC‑07 DX + Procedures</button>
-            <button id="clearRef">Clear</button>
+          <textarea id="ref" placeholder="Choose code system & type below, then click 'Load selected'. You can also paste your own list here."></textarea>
+
+          <!-- NEW layered controls -->
+          <div class="row" style="gap:20px; align-items:flex-start; margin-top:12px">
+            <div class="card" style="padding:10px 12px;">
+              <div style="font-weight:700; margin-bottom:6px">Code system</div>
+              <label><input type="checkbox" id="cs_icd10" checked> ICD-10</label><br>
+              <label><input type="checkbox" id="cs_icd9"> ICD-9 (legacy)</label>
+            </div>
+
+            <div class="card" style="padding:10px 12px;">
+              <div style="font-weight:700; margin-bottom:6px">Code type</div>
+              <label><input type="checkbox" id="ct_dx" checked> Diagnosis (DX)</label><br>
+              <label><input type="checkbox" id="ct_pr" checked> Procedure (PR)</label>
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:8px; justify-content:flex-end">
+              <button id="loadSelected">Load selected</button>
+              <button id="clearRef">Clear</button>
+            </div>
           </div>
+
           <div class="row">
             <label><input type="checkbox" id="useWild" checked> Use smart wildcards (<span class="kbd">x</span>, <span class="kbd">*</span>, <span class="kbd">?</span>)</label>
           </div>
@@ -146,11 +161,12 @@ Formats allowed:
     <section class="section card">
       <h3>How it works</h3>
       <ol>
-        <li>Use the right panel to load PC‑07 codes (Diagnosis, Procedures, or both), or paste your own list (one code per line).</li>
+        <li>Pick your code system (ICD‑10 and/or ICD‑9) and type (DX and/or PR), then click <strong>Load selected</strong>.</li>
         <li>Paste your encounter rows on the left (e.g., <code>I97.120 N</code>).</li>
         <li>Click <strong>Highlight</strong>. Rows where <em>code ∈ list</em> and <em>indicator = N</em> turn red.</li>
         <li>Export or copy the highlighted rows.</li>
       </ol>
+      <p class="tip">ICD‑9 lists below are <em>starter examples</em>. Replace with your organization’s vetted PC‑07 ICD‑9 sets if needed.</p>
     </section>
 
     <footer>
@@ -161,7 +177,8 @@ Formats allowed:
   <script>
   const $ = sel => document.querySelector(sel);
 
-  const PC07_ICD10 = [
+  // === PC‑07 ICD‑10 DIAGNOSES (existing list) ===
+  const PC07_ICD10_DX = [
     'I21.xx','I22.x','I71.xx','I79.0','N17.x','O90.4','J80','J95.1','J95.2','J95.3','J95.82x','J96.0x','J96.2x','J96.9x','R06.03','R09.2',
     'O88.112','O88.113','O88.119','O88.12','O88.13','I46.x','I49.0x','D65','D68.8','D68.9',
     'O45.002','O45.003','O45.009','O45.012','O45.013','O45.019','O45.022','O45.023','O45.029','O45.092','O45.093','O45.099',
@@ -176,7 +193,9 @@ Formats allowed:
     'D57.00','D57.01','D57.02','D57.211','D57.212','D57.219','D57.411','D57.412','D57.419','D57.811','D57.812','D57.819',
     'I26.x','O88.012–O88.03','O88.212–O88.23','O88.312–O88.33','O88.812–O88.83','T80.0XXA'
   ];
-  const PC07_PROC = [
+
+  // === PC‑07 ICD‑10 PROCEDURES (existing list) ===
+  const PC07_ICD10_PR = [
     '5A12012','5A2204Z',
     '0UT90ZL','0UT90ZZ','0UT97ZL','0UT97ZZ',
     '0B110F4','0B113F4','0B114F4',
@@ -184,10 +203,23 @@ Formats allowed:
     '30230H0','30230K0','30230L0','30230M0','30230N0','30230P0','30230R0','30230T0','30230H1','30230K1','30230L1','30230M1','30230N1','30230P1','30230R1','30230T1',
     '30233H0','30233K0','30233L0','30233M0','30233N0','30233P0','30233R0','30233T0','30233H1','30233K1','30233L1','30233M1','30233N1','30233P1','30233R1','30233T1',
     '30240H0','30240K0','30240L0','30240M0','30240N0','30240P0','30240R0','30240T0','30240H1','30240K1','30240L1','30240M1','30240N1','30240P1','30240R1','30240T1',
-    '30243H0','30243K0','30243L0','30243M0','30243N0','30243P0','30243R0','30243T0','30243H1','30243K1','30243L1','30243M1','30243N1','30243P1','30243R1','30243T1'
+    '30243H0','30243K0','30243L0','30243M0','30243N0','30243P0','30243R0','30243T0','30243H1','30243K1','30243L1','30243M0','30243N1','30243P1','30243R1','30243T1'
   ];
-  const PC07_BOTH = Array.from(new Set([...PC07_ICD10, ...PC07_PROC]));
 
+  // === PC‑07 ICD‑9 DIAGNOSES (LEGACY — STARTER EXAMPLES, replace with your official list) ===
+  const PC07_ICD9_DX = [
+    '410.xx','411.0','411.1','411.8','412','414.xx',
+    '427.5','428.xx','415.1x','415.11','415.19','518.81','518.82','518.84',
+    '799.1','518.4','674.30','674.34','674.80','674.84','997.1','997.3','997.5','999.1','999.2','999.3','285.1'
+  ];
+
+  // === PC‑07 ICD‑9 PROCEDURES (LEGACY — STARTER EXAMPLES, replace with your official list) ===
+  const PC07_ICD9_PR = [
+    '99.0x','99.04','99.05','99.06','99.07',
+    '96.70','96.71','96.72','96.04','96.05','39.61','39.50','99.15'
+  ];
+
+  // ======== Core logic ========
   function parseRef(raw){
     const set = new Set();
     raw.split(/\r?\n/).forEach(line=>{
@@ -210,7 +242,7 @@ Formats allowed:
     });
     return lines;
   }
-  function escapeHtml(s){ return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[c])); }
+  function escapeHtml(s){ return s.replace(/[&<>\"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;','\'':'&#39;'}[c])); }
   function wildcardToRegex(p){
     if(/[\-–]/.test(p)){
       const [a,b] = p.split(/[\-–]/).map(s=>s.trim());
@@ -289,6 +321,25 @@ Formats allowed:
     a.download = filename;
     document.body.appendChild(a); a.click(); a.remove();
   }
+
+  // === NEW: Load selected combinations ===
+  function loadSelectedRef(){
+    const use10 = document.getElementById('cs_icd10').checked;
+    const use9  = document.getElementById('cs_icd9').checked;
+    const useDX = document.getElementById('ct_dx').checked;
+    const usePR = document.getElementById('ct_pr').checked;
+
+    const bucket = new Set();
+    if(use10 && useDX) PC07_ICD10_DX.forEach(c => bucket.add(c));
+    if(use10 && usePR) PC07_ICD10_PR.forEach(c => bucket.add(c));
+    if(use9  && useDX) PC07_ICD9_DX.forEach(c  => bucket.add(c));
+    if(use9  && usePR) PC07_ICD9_PR.forEach(c  => bucket.add(c));
+
+    const list = Array.from(bucket).sort((a,b)=> a.localeCompare(b, undefined, {numeric:true, sensitivity:'base'}));
+    document.getElementById('ref').value = list.join('\n');
+    run();
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('run').addEventListener('click', run);
     document.getElementById('clearInput').addEventListener('click', ()=>{ document.getElementById('input').value=''; run(); });
@@ -297,20 +348,11 @@ Formats allowed:
       document.getElementById('input').value = `I97.120 N\nA41.9 N\nJ81.0 Y\nO29.115 N\n5A1955Z N`;
       run();
     });
-    document.getElementById('loadPC07').addEventListener('click', ()=>{
-      document.getElementById('ref').value = PC07_ICD10.join('\n');
-      run();
-    });
-    document.getElementById('loadPC07PR').addEventListener('click', ()=>{
-      document.getElementById('ref').value = PC07_PROC.join('\n');
-      run();
-    });
-    const combined = Array.from(new Set([...PC07_ICD10, ...PC07_PROC]));
-    document.getElementById('loadPC07Both').addEventListener('click', ()=>{
-      const sorted = combined.slice().sort((a,b)=> a.localeCompare(b, undefined, {numeric:true, sensitivity:'base'}));
-      document.getElementById('ref').value = sorted.join('\n');
-      run();
-    });
+
+    // New multiselect loader
+    document.getElementById('loadSelected').addEventListener('click', loadSelectedRef);
+
+    // Export & copy
     document.getElementById('exportCsv').addEventListener('click', ()=>{
       const useWild = document.getElementById('useWild').checked;
       const refSet = parseRef(document.getElementById('ref').value);
@@ -320,11 +362,6 @@ Formats allowed:
       const csv = toCsv(highlighted);
       download('highlighted_matches_N.csv', csv);
     });
-    document.addEventListener('keydown', (e)=>{
-      if(e.altKey && e.key.toLowerCase()==='b'){
-        document.getElementById('loadPC07Both').click();
-      }
-    });
     document.getElementById('copyHighlighted').addEventListener('click', async ()=>{
       const useWild = document.getElementById('useWild').checked;
       const refSet = parseRef(document.getElementById('ref').value);
@@ -332,6 +369,8 @@ Formats allowed:
       const highlighted = parseLines(document.getElementById('input').value).filter(l=> isInRef(l.code, matchers) && l.indicator==='N').map(l=>l.raw).join('\n');
       try{ await navigator.clipboard.writeText(highlighted); alert('Highlighted rows copied to clipboard.'); }catch(e){ alert('Copy failed. You can manually select and copy.'); }
     });
+
+    // Restore last state
     const r = localStorage.getItem('hl_ref');
     const i = localStorage.getItem('hl_input');
     const w = localStorage.getItem('hl_useWild');
